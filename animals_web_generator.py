@@ -34,6 +34,7 @@ for animal in animals_data:
         output += f"Type: {animal["characteristics"]["type"]}\n"
     output += f"\n"
 
+
 output_2 = ""  # define an empty string
 for animal in animals_data:
     # append information to each string
@@ -47,8 +48,24 @@ for animal in animals_data:
     output_2 += "</li>"
 
 
-text = output
-text_update = text.replace(text, output_2)
+
+output_3 = ""  # define an empty string
+for animal in animals_data:
+    # append information to each string
+    output_3 += '<li class="cards__item">'
+    output_3 += f'<div class ="card__title"> {animal["name"]} <br/>\n</div>'
+    output_3 += f'<p class="card__text">'
+    output_3 += f"<strong>Diet:</strong> {animal["characteristics"]["diet"]} <br/>"
+    output_3 += f"<strong>Location:</strong> {", ".join(animal["locations"])} <br/>\n"
+    if "type" in animal["characteristics"]:
+        output_3 += f"<strong>Type:</strong> {animal["characteristics"]["type"]} <br/>\n"
+    output_3 += "</p>"
+    output_3 += "</li>"
+
+
+'''export'''
+text = output_2
+text_update = text.replace(text, output_3)
 
 with open("animals_template.html", "r") as file:
     html_content = file.read()
@@ -57,6 +74,7 @@ update_content = html_content.replace(text, text_update)
 
 with open("animals_template.html", "w", encoding="utf-8") as file:
     file.write(update_content)
+
 
 print("HTML file updated successfully!")
 
