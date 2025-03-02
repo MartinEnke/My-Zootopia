@@ -1,3 +1,4 @@
+import html
 import json
 
 
@@ -15,12 +16,45 @@ for animal in animals_data:
     name = animal["name"]
     diet = animal["characteristics"]["diet"]
     location = ", ".join(animal["locations"])
-    print(f"Name: {name}\nDiet: {diet}\nLocation: {location}")
+    #print(f"Name: {name}\nDiet: {diet}\nLocation: {location}")
 
+    #if "type" in animal["characteristics"]:
+        #print(f"Type: {animal["characteristics"]["type"]}")
+
+    #print()
+
+
+output = ""  # define an empty string
+for animal in animals_data:
+    # append information to each string
+    output += f"Name: {animal["name"]}\n"
+    output += f"Diet: {animal["characteristics"]["diet"]}\n"
+    output += f"Location: {", ".join(animal["locations"])}\n"
     if "type" in animal["characteristics"]:
-        print(f"Type: {animal["characteristics"]["type"]}")
+        output += f"Type: {animal["characteristics"]["type"]}\n"
+    output += f"\n"
 
-    print()
+
+
+text = "__REPLACE_ANIMALS_INFO__"
+text_update = text.replace(text, output)
+
+with open("animals_template.html", "r") as file:
+    html_content = file.read()
+
+update_content = html_content.replace(text, text_update)
+
+with open("animals_template.html", "w", encoding="utf-8") as file:
+    file.write(update_content)
+
+print("HTML file updated successfully!")
+
+
+
+
+
+
+
 
 
 
