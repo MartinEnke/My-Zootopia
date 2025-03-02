@@ -34,7 +34,7 @@ while True:
         break
 
     else:
-        print("Invalid Input, please choose from the list.")
+        print(f"Invalid Input, please choose from the list.\n")
 
 
 
