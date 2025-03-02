@@ -23,49 +23,36 @@ for animal in animals_data:
 
     #print()
 
-
-output = ""  # define an empty string
-for animal in animals_data:
-    # append information to each string
-    output += f"Name: {animal["name"]}\n"
-    output += f"Diet: {animal["characteristics"]["diet"]}\n"
-    output += f"Location: {", ".join(animal["locations"])}\n"
+def serialize_animal(animal):
+    output = ''
+    output += '<li class="cards__item">\n'
+    output += f'<div class="card__title">{animal["name"]}</div>\n'
+    output += f'<p class="card__text">'
+    output += f"<strong>Diet:</strong> {animal["characteristics"]["diet"]} <br/>"
+    output += f"<strong>Location:</strong> {", ".join(animal["locations"])} <br/>\n"
+    if "color" in animal["characteristics"]:
+        output += f"<strong>Color:</strong> {animal["characteristics"]["color"]} <br/>\n"
+    if "prey" in animal["characteristics"]:
+        output += f"<strong>Prey:</strong> {animal["characteristics"]["prey"]} <br/>\n"
+    if "main_prey" in animal["characteristics"]:
+        output += f"<strong>Main Prey:</strong> {animal["characteristics"]["main_prey"]} <br/>\n"
     if "type" in animal["characteristics"]:
-        output += f"Type: {animal["characteristics"]["type"]}\n"
-    output += f"\n"
+        output += f"<strong>Type:</strong> {animal["characteristics"]["type"]} <br/>\n"
+    if "scientific_name" in animal["taxonomy"]:
+        output += f"<strong>Scientific Name:</strong> {animal["taxonomy"]["scientific_name"]} <br/>\n"
+    output += "</p>"
+    output += "</li>"
+    return output
 
 
-output_2 = ""  # define an empty string
+output = ''
 for animal in animals_data:
-    # append information to each string
-    output_2 += '<li class="cards__item">'
-    output_2 += f"Name: {animal["name"]}<br/>\n"
-    output_2 += f"Diet: {animal["characteristics"]["diet"]}<br/>\n"
-    output_2 += f"Location: {", ".join(animal["locations"])}<br/>\n"
-    if "type" in animal["characteristics"]:
-        output_2 += f"Type: {animal["characteristics"]["type"]}<br/>\n"
-    output_2 += f"<br/>\n"
-    output_2 += "</li>"
+    output += serialize_animal(animal)
 
 
-
-output_3 = ""  # define an empty string
-for animal in animals_data:
-    # append information to each string
-    output_3 += '<li class="cards__item">'
-    output_3 += f'<div class ="card__title"> {animal["name"]} <br/>\n</div>'
-    output_3 += f'<p class="card__text">'
-    output_3 += f"<strong>Diet:</strong> {animal["characteristics"]["diet"]} <br/>"
-    output_3 += f"<strong>Location:</strong> {", ".join(animal["locations"])} <br/>\n"
-    if "type" in animal["characteristics"]:
-        output_3 += f"<strong>Type:</strong> {animal["characteristics"]["type"]} <br/>\n"
-    output_3 += "</p>"
-    output_3 += "</li>"
-
-
-'''export'''
-text = output_2
-text_update = text.replace(text, output_3)
+#export
+text = "__REPLACE_ANIMALS_INFO__"
+text_update = text.replace(text, output)
 
 with open("animals_template.html", "r") as file:
     html_content = file.read()
