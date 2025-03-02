@@ -21,7 +21,7 @@ while True:
     for skin in sorted(skin_types):
         print(f"- {skin}")
 
-    selected_skin_type = input("\nEnter a skin type from the list above or hit enter to show all types: ").strip().lower()
+    selected_skin_type = input("\nChoose a skin type or hit enter to show all: ").strip().lower()
 
     if selected_skin_type == "":
         filtered_animals = animals_data
