@@ -1,27 +1,42 @@
-import html
 import json
 
-
-def load_data(file_path):
-    """ Loads a JSON file """
-    with open(file_path, "r") as file:
-        return json.load(file)
-
-animals_data = load_data('animals_data.json')
-
-print(animals_data)
+# original HTML-file
+HTML_TEMPLATE_FILE = "animals_template.html"
+# file which will be overwritten
+OUTPUT_HTML_FILE = "index.html"
 
 
+with open("animals_data.json", "r", encoding="utf-8") as file:
+    animals_data = json.load(file)
+
+
+skin_types = set()
 for animal in animals_data:
-    name = animal["name"]
-    diet = animal["characteristics"]["diet"]
-    location = ", ".join(animal["locations"])
-    #print(f"Name: {name}\nDiet: {diet}\nLocation: {location}")
+    if "skin_type" in animal["characteristics"]:
+        skin_types.add(animal["characteristics"]["skin_type"])
 
-    #if "type" in animal["characteristics"]:
-        #print(f"Type: {animal["characteristics"]["type"]}")
 
-    #print()
+while True:
+    print("Available skin types:")
+    for skin in sorted(skin_types):
+        print(f"- {skin}")
+
+    selected_skin_type = input("\nEnter a skin type from the list above or hit enter to show all types: ").strip().lower()
+
+    if selected_skin_type == "":
+        filtered_animals = animals_data
+        break
+    elif selected_skin_type in ("fur", "hair", "scales"):
+        filtered_animals = []
+        for animal in animals_data:
+            if "skin_type" in animal["characteristics"] and animal["characteristics"]["skin_type"].lower() == selected_skin_type:
+                filtered_animals.append(animal)
+        break
+
+    else:
+        print("Invalid Input, please choose from the list.")
+
+
 
 def serialize_animal(animal):
     output = ''
@@ -30,6 +45,9 @@ def serialize_animal(animal):
     output += f'<p class="card__text">'
     output += f"<strong>Diet:</strong> {animal["characteristics"]["diet"]} <br/>"
     output += f"<strong>Location:</strong> {", ".join(animal["locations"])} <br/>\n"
+    if "skin_type" in animal["characteristics"]:
+        output += f"<strong>Skin Type:</strong> {animal["characteristics"]["skin_type"]} <br/>\n"
+
     if "color" in animal["characteristics"]:
         output += f"<strong>Color:</strong> {animal["characteristics"]["color"]} <br/>\n"
     if "prey" in animal["characteristics"]:
@@ -46,7 +64,7 @@ def serialize_animal(animal):
 
 
 output = ''
-for animal in animals_data:
+for animal in filtered_animals:  #
     output += serialize_animal(animal)
 
 
@@ -54,26 +72,12 @@ for animal in animals_data:
 text = "__REPLACE_ANIMALS_INFO__"
 text_update = text.replace(text, output)
 
-with open("animals_template.html", "r") as file:
+with open(HTML_TEMPLATE_FILE, "r", encoding="utf-8") as file:
     html_content = file.read()
 
 update_content = html_content.replace(text, text_update)
 
-with open("animals_template.html", "w", encoding="utf-8") as file:
+with open(OUTPUT_HTML_FILE, "w", encoding="utf-8") as file:
     file.write(update_content)
 
-
 print("HTML file updated successfully!")
-
-
-
-
-
-
-
-
-
-
-
-
-
