@@ -1,4 +1,4 @@
-import requests
+import data_fetcher
 
 # original HTML-file
 HTML_TEMPLATE_FILE = "animals_template.html"
@@ -7,6 +7,9 @@ OUTPUT_HTML_FILE = "index.html"
 
 
 def serialize_animal(animal):
+    '''
+    Collects and writes the data from the json file into HTML code
+    '''
     output = ''
     output += '<li class="cards__item">\n'
     output += f'<div class="card__title">{animal["name"]}</div>\n'
@@ -32,6 +35,9 @@ def serialize_animal(animal):
 
 
 def create_website(output):
+    '''
+    Writes the HTML content into an HTML file
+    '''
 
     #export
     text = "__REPLACE_ANIMALS_INFO__"
@@ -48,23 +54,18 @@ def create_website(output):
 
 def main():
     animal = input("Enter animal name: ")
-    API_KEY = "Sxt9ncDQfyLYr5YnqVXY3w==AiT3mSC1ktGYGWbp"
-    api_url = f'https://api.api-ninjas.com/v1/animals?name={animal}'
-    response = requests.get(api_url, headers={"X-API-KEY": API_KEY})
+    animals_data = data_fetcher.fetch_data(animal)
 
-    if response.status_code == requests.codes.ok:
-        animals_data = response.json()
+    if not animals_data:
+        output = f"<p style='color:red;'>The animal {animal} does not exist in the database</p>"
+        print(f"The animal {animal} does not exist in the database")
 
-        if not animals_data:
-            output = f"<p style='color:red;'>The animal {animal} does not exist in the database</p>"
-            print(f"The animal {animal} does not exist in the database")
-
-        else:
-            output = ""
-            for animal in animals_data:
-                output += serialize_animal(animal)
-        create_website(output)
-        print("HTML file updated successfully!")
+    else:
+        output = ""
+        for animal in animals_data:
+            output += serialize_animal(animal)
+    create_website(output)
+    print("HTML file updated successfully!")
 
 if __name__ == "__main__":
     main()
