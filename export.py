@@ -1,4 +1,3 @@
-
 def export_html_file(template_file, output_file, content_update):
     '''
     Replaces the requested content with the placeholder
